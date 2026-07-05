@@ -62,7 +62,13 @@ function sortProjects(projectList: Project[], sortOption: ProjectSort) {
       return byNewest(projectA, projectB);
     }
 
-    return projectB.popularity - projectA.popularity || byNewest(projectA, projectB);
+    // Popularity sorts strictly by the popularity value, independent of the
+    // folder order (01, 02, ...). Equal values fall back to the title so the
+    // result stays deterministic instead of depending on the folder sequence.
+    return (
+      projectB.popularity - projectA.popularity ||
+      projectA.title.localeCompare(projectB.title)
+    );
   });
 }
 
