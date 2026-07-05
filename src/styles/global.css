@@ -404,6 +404,12 @@ img {
   border-color: rgba(var(--accent-rgb), 0.28);
 }
 
+.software-chip-more {
+  padding: 4px 11px;
+  color: var(--text-faint);
+  background: transparent;
+}
+
 .software-icon {
   width: 22px;
   height: 22px;

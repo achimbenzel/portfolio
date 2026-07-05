@@ -34,7 +34,7 @@ export default function Header() {
           <div className="identity-meta" aria-label="Kurzprofil">
             <span>25 Jahre</span>
             <span>Bachelor of Arts</span>
-            <span>Mainz</span>
+            <span>RLP</span>
           </div>
           <div className="identity-software" aria-label="Verwendete Software">
             {softwareTools.map((tool) => (
@@ -43,6 +43,7 @@ export default function Header() {
                 <span>{tool.label}</span>
               </span>
             ))}
+            <span className="software-chip software-chip-more">&amp; mehr &hellip;</span>
           </div>
         </div>
       </div>

@@ -75,7 +75,7 @@ export default function FilterBar({
           onClick={() => setAreTagsOpen((isOpen) => !isOpen)}
         >
           {areTagsOpen ? <MinusIcon /> : <PlusIcon />}
-          <span>Tags &amp; Software</span>
+          <span>Software &amp; Tags</span>
         </button>
       </div>
 
@@ -84,24 +84,6 @@ export default function FilterBar({
         aria-hidden={!areTagsOpen}
       >
         <div className="filter-tags-inner">
-          <div className="filter-group filter-group-details">
-            <span className="filter-label">Tags</span>
-            <div className="filter-chip-row">
-              {tags.map((tag) => (
-                <button
-                  className={isActive(activeFilter, "tag", tag) ? "filter-chip active" : "filter-chip"}
-                  data-filter-type="tag"
-                  data-filter-value={tag}
-                  key={tag}
-                  type="button"
-                  tabIndex={areTagsOpen ? 0 : -1}
-                  onClick={() => onFilterChange({ type: "tag", value: tag })}
-                >
-                  {tag}
-                </button>
-              ))}
-            </div>
-          </div>
           {software.length > 0 ? (
             <div className="filter-group filter-group-details">
               <span className="filter-label">Software</span>
@@ -127,6 +109,24 @@ export default function FilterBar({
               </div>
             </div>
           ) : null}
+          <div className="filter-group filter-group-details">
+            <span className="filter-label">Tags</span>
+            <div className="filter-chip-row">
+              {tags.map((tag) => (
+                <button
+                  className={isActive(activeFilter, "tag", tag) ? "filter-chip active" : "filter-chip"}
+                  data-filter-type="tag"
+                  data-filter-value={tag}
+                  key={tag}
+                  type="button"
+                  tabIndex={areTagsOpen ? 0 : -1}
+                  onClick={() => onFilterChange({ type: "tag", value: tag })}
+                >
+                  {tag}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </section>
