@@ -42,7 +42,10 @@ export default function Footer() {
       <div className="footer-top">
         <div className="footer-brand">
           <BrandLogo />
-          <p>Freie Projektanfragen &amp; Kollaborationen jederzeit willkommen.</p>
+          <p>
+            Kontaktieren Sie mich gerne für Rückfragen, Gespräche oder passende
+            berufliche Möglichkeiten.
+          </p>
         </div>
         <a className="footer-cta" href="mailto:benzelachim@gmail.com">
           Kontakt aufnehmen
