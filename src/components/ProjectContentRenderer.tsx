@@ -1,5 +1,7 @@
 import { type ChangeEvent, type CSSProperties, useRef, useState } from "react";
-import { PauseIcon, PlayIcon } from "./icons/LucideIcons";
+import Avatar from "./Avatar";
+import Media from "./Media";
+import { ImagePlaceholderIcon, PauseIcon, PlayIcon } from "./icons/LucideIcons";
 import type { ProjectContentBlock, ProjectVideoBlock } from "../types/project";
 
 type ProjectContentRendererProps = {
@@ -24,6 +26,7 @@ function ProjectVideoPlayer({ poster, src, title }: ProjectVideoBlock) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [hasError, setHasError] = useState(false);
 
   const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
   const scrubberStyle = {
@@ -82,6 +85,18 @@ function ProjectVideoPlayer({ poster, src, title }: ProjectVideoBlock) {
     }
   };
 
+  if (hasError) {
+    return (
+      <figure className="content-video">
+        <div className="video-player video-player-fallback" role="img" aria-label={title}>
+          <ImagePlaceholderIcon className="media-fallback-icon" />
+          <span className="media-fallback-label">{title}</span>
+        </div>
+        <figcaption>{title}</figcaption>
+      </figure>
+    );
+  }
+
   return (
     <figure className="content-video">
       <div className="video-player">
@@ -98,6 +113,7 @@ function ProjectVideoPlayer({ poster, src, title }: ProjectVideoBlock) {
           onPause={() => setIsPlaying(false)}
           onPlay={() => setIsPlaying(true)}
           onTimeUpdate={syncVideoTime}
+          onError={() => setHasError(true)}
         />
         <div className="video-controls" aria-label="Video Steuerung">
           <button
@@ -147,7 +163,7 @@ export default function ProjectContentRenderer({ content }: ProjectContentRender
         if (block.type === "image") {
           return (
             <figure className="content-image" key={`${block.type}-${index}`}>
-              <img src={block.src} alt={block.alt} loading="lazy" />
+              <Media src={block.src} alt={block.alt} />
             </figure>
           );
         }
@@ -155,7 +171,7 @@ export default function ProjectContentRenderer({ content }: ProjectContentRender
         if (block.type === "testimonial") {
           return (
             <section className="content-testimonial" key={`${block.type}-${index}`}>
-              <img src={block.photo} alt={block.name} loading="lazy" />
+              <Avatar className="testimonial-photo" src={block.photo} name={block.name} />
               <div>
                 <span className="eyebrow">Kundenstimme</span>
                 <blockquote>{block.quote}</blockquote>
@@ -177,7 +193,7 @@ export default function ProjectContentRenderer({ content }: ProjectContentRender
             <div className="content-image-grid" key={`${block.type}-${index}`}>
               {block.images.map((image) => (
                 <figure key={image.src}>
-                  <img src={image.src} alt={image.alt} loading="lazy" />
+                  <Media src={image.src} alt={image.alt} />
                 </figure>
               ))}
             </div>

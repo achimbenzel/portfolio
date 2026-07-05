@@ -72,3 +72,22 @@ export function ChevronRightIcon(props: IconProps) {
     </LucideIcon>
   );
 }
+
+export function ArrowUpRightIcon(props: IconProps) {
+  return (
+    <LucideIcon {...props}>
+      <path d="M7 17 17 7" />
+      <path d="M7 7h10v10" />
+    </LucideIcon>
+  );
+}
+
+export function ImagePlaceholderIcon(props: IconProps) {
+  return (
+    <LucideIcon {...props}>
+      <rect width="18" height="18" x="3" y="3" rx="2" />
+      <circle cx="9" cy="9" r="1.6" />
+      <path d="m21 15-4.35-4.35a2 2 0 0 0-2.83 0L4 20" />
+    </LucideIcon>
+  );
+}

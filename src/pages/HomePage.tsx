@@ -116,36 +116,62 @@ export default function HomePage() {
     [filteredProjects, sortOption],
   );
 
+  const resetFilter = () => setActiveFilter({ type: "all", value: "All" });
+  const projectCount = sortedProjects.length;
+  const countLabel = `${projectCount} ${projectCount === 1 ? "Projekt" : "Projekte"}`;
+
   return (
     <main className="home-page">
       <Header />
-      <FilterBar
-        activeFilter={activeFilter}
-        categories={categories}
-        software={software}
-        tags={tags}
-        onFilterChange={setActiveFilter}
-      />
-      <div className="result-row">
-        <span>Projekte</span>
-        <div className="sort-control" aria-label="Projekte sortieren">
-          <button
-            className={sortOption === "popularity" ? "active" : ""}
-            type="button"
-            onClick={() => setSortOption("popularity")}
-          >
-            Beliebtheit
-          </button>
-          <button
-            className={sortOption === "date" ? "active" : ""}
-            type="button"
-            onClick={() => setSortOption("date")}
-          >
-            Datum
-          </button>
+
+      <section className="work-section" aria-label="Ausgewählte Arbeiten">
+        <div className="section-heading">
+          <h1>Selected Works</h1>
+          <p>
+            Eine reduzierte Auswahl aus Branding, Motion und 3D &mdash; fokussiert auf
+            Konzept, Handwerk und Ergebnis.
+          </p>
         </div>
-      </div>
-      <ProjectGrid projects={sortedProjects} />
+
+        <FilterBar
+          activeFilter={activeFilter}
+          categories={categories}
+          software={software}
+          tags={tags}
+          onFilterChange={setActiveFilter}
+        />
+
+        <div className="result-row">
+          <span className="result-count">
+            {countLabel}
+            {activeFilter.type !== "all" ? (
+              <button className="result-active-filter" type="button" onClick={resetFilter}>
+                {activeFilter.value}
+                <span aria-hidden="true">&times;</span>
+              </button>
+            ) : null}
+          </span>
+          <div className="sort-control" aria-label="Projekte sortieren">
+            <span className="sort-label">Sortieren</span>
+            <button
+              className={sortOption === "popularity" ? "active" : ""}
+              type="button"
+              onClick={() => setSortOption("popularity")}
+            >
+              Beliebtheit
+            </button>
+            <button
+              className={sortOption === "date" ? "active" : ""}
+              type="button"
+              onClick={() => setSortOption("date")}
+            >
+              Datum
+            </button>
+          </div>
+        </div>
+
+        <ProjectGrid projects={sortedProjects} onReset={resetFilter} />
+      </section>
     </main>
   );
 }

@@ -1,32 +1,17 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import Avatar from "./Avatar";
+import BrandLogo from "./BrandLogo";
+import SoftwareIcon from "./SoftwareIcon";
 import { MinusIcon, PlusIcon } from "./icons/LucideIcons";
 
 const softwareTools = [
-  {
-    label: "Illustrator",
-    src: "/Assets/software/illustrator.svg",
-  },
-  {
-    label: "Photoshop",
-    src: "/Assets/software/photoshop.svg",
-  },
-  {
-    label: "InDesign",
-    src: "/Assets/software/indesign.svg",
-  },
-  {
-    label: "After Effects",
-    src: "/Assets/software/after-effects.svg",
-  },
-  {
-    label: "Premiere",
-    src: "/Assets/software/premiere.svg",
-  },
-  {
-    label: "Blender",
-    src: "/Assets/software/blender.svg",
-  },
+  { label: "Illustrator", src: "/Assets/software/illustrator.svg" },
+  { label: "Photoshop", src: "/Assets/software/photoshop.svg" },
+  { label: "InDesign", src: "/Assets/software/indesign.svg" },
+  { label: "After Effects", src: "/Assets/software/after-effects.svg" },
+  { label: "Premiere", src: "/Assets/software/premiere.svg" },
+  { label: "Blender", src: "/Assets/software/blender.svg" },
 ];
 
 export default function Header() {
@@ -35,36 +20,28 @@ export default function Header() {
   return (
     <header className="site-header">
       <div className="identity-lockup">
-        <img
+        <Avatar
           className="identity-portrait"
           src="/Assets/images/portrait.webp"
-          alt="Achim Benzel Portrait"
+          name="Achim Benzel"
+          loading="eager"
         />
         <div className="identity-copy">
           <Link className="logo-link" to="/" aria-label="Zur Projektuebersicht">
-            <img src="/Assets/Logo/logo_wide_dark.svg" alt="Achim Benzel" />
+            <BrandLogo />
           </Link>
+          <p className="identity-role">Brand Identity &middot; Motion &middot; 3D Design</p>
           <div className="identity-meta" aria-label="Kurzprofil">
             <span>25 Jahre</span>
             <span>Bachelor of Arts</span>
+            <span>Mainz</span>
           </div>
-        </div>
-      </div>
-
-      <div className="software-stack" aria-label="Programme">
-        <div className="software-list">
-          {softwareTools.map((tool) => (
-            <span className="software-item" key={tool.label} title={tool.label}>
-              <img src={tool.src} alt="" aria-hidden="true" />
-              <span>{tool.label}</span>
-            </span>
-          ))}
         </div>
       </div>
 
       <section className={isAboutOpen ? "about-section open" : "about-section"}>
         <div className="about-section-head">
-          <span>About me</span>
+          <span>Über mich</span>
           <button
             className="about-toggle"
             type="button"
@@ -73,6 +50,7 @@ export default function Header() {
             onClick={() => setIsAboutOpen((isOpen) => !isOpen)}
           >
             {isAboutOpen ? <MinusIcon /> : <PlusIcon />}
+            <span>{isAboutOpen ? "Schließen" : "Lesen"}</span>
           </button>
         </div>
         <div className="about-panel-wrap" id="about-panel" aria-hidden={!isAboutOpen}>
@@ -92,6 +70,14 @@ export default function Header() {
                 Technik interessiert mich bis heute stark. Als Ausgleich brauche ich
                 Natur und Sport, weil beides den Kopf frei macht und neue Ideen sortiert.
               </p>
+              <div className="about-software" aria-label="Programme">
+                {softwareTools.map((tool) => (
+                  <span className="software-item" key={tool.label} title={tool.label}>
+                    <SoftwareIcon src={tool.src} name={tool.label} />
+                    <span>{tool.label}</span>
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
         </div>

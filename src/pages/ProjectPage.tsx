@@ -1,5 +1,7 @@
 import { Link, useParams } from "react-router-dom";
+import Media from "../components/Media";
 import ProjectContentRenderer from "../components/ProjectContentRenderer";
+import SoftwareIcon from "../components/SoftwareIcon";
 import { ChevronLeftIcon, ChevronRightIcon } from "../components/icons/LucideIcons";
 import { projects } from "../data/projects.generated";
 import type { Project } from "../types/project";
@@ -79,7 +81,7 @@ export default function ProjectPage() {
                 <span className="project-software-list">
                   {project.software.map((tool) => (
                     <span className="software-item" key={tool.name} title={tool.name}>
-                      <img src={tool.icon} alt="" loading="lazy" />
+                      <SoftwareIcon src={tool.icon} name={tool.name} />
                       {tool.name}
                     </span>
                   ))}
@@ -91,7 +93,7 @@ export default function ProjectPage() {
       </header>
 
       <figure className="project-hero-image">
-        <img src={project.thumbnail} alt="" />
+        <Media src={project.thumbnail} alt={project.title} label={project.title} loading="eager" />
       </figure>
 
       <ProjectContentRenderer content={project.content} />

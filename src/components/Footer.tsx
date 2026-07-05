@@ -1,3 +1,5 @@
+import BrandLogo from "./BrandLogo";
+
 const baseUrl = "https://achimbenzel.com";
 
 const socialLinks = [
@@ -39,7 +41,8 @@ export default function Footer() {
     <footer className="site-footer">
       <div className="footer-top">
         <div className="footer-brand">
-          <img src="/Assets/Logo/logo_wide_dark.svg" alt="Achim Benzel" />
+          <BrandLogo />
+          <p>Freie Projektanfragen &amp; Kollaborationen jederzeit willkommen.</p>
         </div>
         <a className="footer-cta" href="mailto:benzelachim@gmail.com">
           Kontakt aufnehmen

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import SoftwareIcon from "./SoftwareIcon";
 import { MinusIcon, PlusIcon } from "./icons/LucideIcons";
 
 export type ProjectFilter =
@@ -70,10 +71,11 @@ export default function FilterBar({
           }
           type="button"
           aria-expanded={areTagsOpen}
-          aria-label={areTagsOpen ? "Details ausblenden" : "Details anzeigen"}
+          aria-label={areTagsOpen ? "Weitere Filter ausblenden" : "Weitere Filter anzeigen"}
           onClick={() => setAreTagsOpen((isOpen) => !isOpen)}
         >
           {areTagsOpen ? <MinusIcon /> : <PlusIcon />}
+          <span>Tags &amp; Software</span>
         </button>
       </div>
 
@@ -118,7 +120,7 @@ export default function FilterBar({
                     tabIndex={areTagsOpen ? 0 : -1}
                     onClick={() => onFilterChange({ type: "software", value: tool.name })}
                   >
-                    <img src={tool.icon} alt="" loading="lazy" />
+                    <SoftwareIcon src={tool.icon} name={tool.name} />
                     {tool.name}
                   </button>
                 ))}
