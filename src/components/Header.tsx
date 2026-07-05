@@ -36,6 +36,14 @@ export default function Header() {
             <span>Bachelor of Arts</span>
             <span>Mainz</span>
           </div>
+          <div className="identity-software" aria-label="Verwendete Software">
+            {softwareTools.map((tool) => (
+              <span className="software-chip" key={tool.label} title={tool.label}>
+                <SoftwareIcon src={tool.src} name={tool.label} />
+                <span>{tool.label}</span>
+              </span>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -70,14 +78,6 @@ export default function Header() {
                 Technik interessiert mich bis heute stark. Als Ausgleich brauche ich
                 Natur und Sport, weil beides den Kopf frei macht und neue Ideen sortiert.
               </p>
-              <div className="about-software" aria-label="Programme">
-                {softwareTools.map((tool) => (
-                  <span className="software-item" key={tool.label} title={tool.label}>
-                    <SoftwareIcon src={tool.src} name={tool.label} />
-                    <span>{tool.label}</span>
-                  </span>
-                ))}
-              </div>
             </div>
           </div>
         </div>

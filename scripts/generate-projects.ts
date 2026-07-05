@@ -31,6 +31,13 @@ const requiredFields = [
   "content",
 ] as const;
 
+// Terms that must only ever be used as tags, never as standalone categories.
+const tagOnlyTerms = new Set(["erkläranimation", "musikvisualisierung"]);
+
+function isTagOnlyTerm(value: string) {
+  return tagOnlyTerms.has(value.toLowerCase());
+}
+
 function isRecord(value: unknown): value is Record<string, unknown> {
   return Boolean(value) && typeof value === "object" && !Array.isArray(value);
 }
@@ -267,11 +274,15 @@ function validateProject(rawProject: unknown, folder: string): Project {
   const popularity = readNumber(project.popularity, "popularity", folder);
   const client = readString(project.client, "client", folder);
   const rawCategory = readString(project.category, "category", folder);
-  const categories =
+  const rawCategories =
     project.categories === undefined
       ? readStringList(rawCategory, "category", folder)
       : readStringList(project.categories, "categories", folder);
-  const category = rawCategory;
+  // Keep tag-only terms out of the category set — they belong to tags.
+  const keptCategories = rawCategories.filter((entry) => !isTagOnlyTerm(entry));
+  const demotedCategories = rawCategories.filter((entry) => isTagOnlyTerm(entry));
+  const categories = keptCategories.length > 0 ? keptCategories : [rawCategory];
+  const category = isTagOnlyTerm(rawCategory) ? categories[0] : rawCategory;
   const thumbnail = readString(project.thumbnail, "thumbnail", folder);
   const description = readString(project.description, "description", folder);
 
@@ -288,7 +299,7 @@ function validateProject(rawProject: unknown, folder: string): Project {
     throw new Error(`Project ${folder}: "tags" must be an array of strings.`);
   }
 
-  const tags = project.tags as string[];
+  const tags = Array.from(new Set([...(project.tags as string[]), ...demotedCategories]));
 
   if (!isRecord(project.meta)) {
     throw new Error(`Project ${folder}: "meta" must be an object.`);

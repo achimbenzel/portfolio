@@ -151,11 +151,22 @@ export default function ProjectContentRenderer({ content }: ProjectContentRender
     <div className="project-content">
       {content.map((block, index) => {
         if (block.type === "text") {
+          const hasHead = Boolean(block.eyebrow || block.headline);
+
           return (
-            <section className="content-text" key={`${block.type}-${index}`}>
-              {block.eyebrow ? <span className="eyebrow">{block.eyebrow}</span> : null}
-              {block.headline ? <h2>{block.headline}</h2> : null}
-              <p>{block.body}</p>
+            <section
+              className={hasHead ? "content-text" : "content-text content-text-plain"}
+              key={`${block.type}-${index}`}
+            >
+              {hasHead ? (
+                <div className="content-text-head">
+                  {block.eyebrow ? <span className="eyebrow">{block.eyebrow}</span> : null}
+                  {block.headline ? <h2>{block.headline}</h2> : null}
+                </div>
+              ) : null}
+              <div className="content-text-body">
+                <p>{block.body}</p>
+              </div>
             </section>
           );
         }
@@ -171,14 +182,16 @@ export default function ProjectContentRenderer({ content }: ProjectContentRender
         if (block.type === "testimonial") {
           return (
             <section className="content-testimonial" key={`${block.type}-${index}`}>
-              <Avatar className="testimonial-photo" src={block.photo} name={block.name} />
-              <div>
-                <span className="eyebrow">Kundenstimme</span>
-                <blockquote>{block.quote}</blockquote>
-                <p>
+              <div className="testimonial-aside">
+                <Avatar className="testimonial-photo" src={block.photo} name={block.name} />
+                <p className="testimonial-attribution">
                   <strong>{block.name}</strong>
                   <span>{block.role}</span>
                 </p>
+              </div>
+              <div className="testimonial-body">
+                <span className="eyebrow">Kundenstimme</span>
+                <blockquote>{block.quote}</blockquote>
               </div>
             </section>
           );

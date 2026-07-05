@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import FilterBar, { type ProjectFilter } from "../components/FilterBar";
 import Header from "../components/Header";
 import ProjectGrid from "../components/ProjectGrid";
-import { projects } from "../data/projects.generated";
+import { projects } from "../data/projects";
 import type { Project, ProjectSoftware } from "../types/project";
 
 type ProjectSort = "popularity" | "date";
@@ -151,22 +151,28 @@ export default function HomePage() {
               </button>
             ) : null}
           </span>
-          <div className="sort-control" aria-label="Projekte sortieren">
-            <span className="sort-label">Sortieren</span>
-            <button
-              className={sortOption === "popularity" ? "active" : ""}
-              type="button"
-              onClick={() => setSortOption("popularity")}
-            >
-              Beliebtheit
-            </button>
-            <button
-              className={sortOption === "date" ? "active" : ""}
-              type="button"
-              onClick={() => setSortOption("date")}
-            >
-              Datum
-            </button>
+          <div className="sort-control">
+            <span className="sort-label" id="sort-label">
+              Sortieren nach
+            </span>
+            <div className="sort-options" role="group" aria-labelledby="sort-label">
+              <button
+                className={sortOption === "popularity" ? "sort-option active" : "sort-option"}
+                type="button"
+                aria-pressed={sortOption === "popularity"}
+                onClick={() => setSortOption("popularity")}
+              >
+                Beliebtheit
+              </button>
+              <button
+                className={sortOption === "date" ? "sort-option active" : "sort-option"}
+                type="button"
+                aria-pressed={sortOption === "date"}
+                onClick={() => setSortOption("date")}
+              >
+                Datum
+              </button>
+            </div>
           </div>
         </div>
 

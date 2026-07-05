@@ -3,7 +3,7 @@ import Media from "../components/Media";
 import ProjectContentRenderer from "../components/ProjectContentRenderer";
 import SoftwareIcon from "../components/SoftwareIcon";
 import { ChevronLeftIcon, ChevronRightIcon } from "../components/icons/LucideIcons";
-import { projects } from "../data/projects.generated";
+import { projects } from "../data/projects";
 import type { Project } from "../types/project";
 import NotFoundPage from "./NotFoundPage";
 
@@ -48,49 +48,48 @@ export default function ProjectPage() {
       </Link>
 
       <header className="project-hero">
-        <div>
-          <span className="eyebrow">{categoryLabel}</span>
-          <h1>{project.title}</h1>
-          <p>{project.description}</p>
-        </div>
-        <dl className="project-meta">
-          <div>
-            <dt>Jahr</dt>
-            <dd>{project.year}</dd>
-          </div>
-          <div>
-            <dt>Kunde</dt>
-            <dd>{project.client}</dd>
-          </div>
-          <div>
-            <dt>Kategorie</dt>
-            <dd>{categoryLabel}</dd>
-          </div>
-          {Object.entries(project.meta)
-            .filter(([key]) => key !== "source")
-            .map(([key, value]) => (
-              <div key={key}>
-                <dt>{metaLabels[key] ?? key}</dt>
-                <dd>{value}</dd>
-              </div>
-            ))}
-          {project.software.length > 0 ? (
-            <div className="project-meta-software">
-              <dt>Software</dt>
-              <dd>
-                <span className="project-software-list">
-                  {project.software.map((tool) => (
-                    <span className="software-item" key={tool.name} title={tool.name}>
-                      <SoftwareIcon src={tool.icon} name={tool.name} />
-                      {tool.name}
-                    </span>
-                  ))}
-                </span>
-              </dd>
-            </div>
-          ) : null}
-        </dl>
+        <span className="eyebrow">{categoryLabel}</span>
+        <h1>{project.title}</h1>
+        <p className="project-lead">{project.description}</p>
       </header>
+
+      <dl className="project-meta">
+        <div>
+          <dt>Jahr</dt>
+          <dd>{project.year}</dd>
+        </div>
+        <div>
+          <dt>Kunde</dt>
+          <dd>{project.client}</dd>
+        </div>
+        <div>
+          <dt>Kategorie</dt>
+          <dd>{categoryLabel}</dd>
+        </div>
+        {Object.entries(project.meta)
+          .filter(([key]) => key !== "source")
+          .map(([key, value]) => (
+            <div key={key}>
+              <dt>{metaLabels[key] ?? key}</dt>
+              <dd>{value}</dd>
+            </div>
+          ))}
+        {project.software.length > 0 ? (
+          <div className="project-meta-software">
+            <dt>Software</dt>
+            <dd>
+              <span className="project-software-list">
+                {project.software.map((tool) => (
+                  <span className="software-chip" key={tool.name} title={tool.name}>
+                    <SoftwareIcon src={tool.icon} name={tool.name} />
+                    {tool.name}
+                  </span>
+                ))}
+              </span>
+            </dd>
+          </div>
+        ) : null}
+      </dl>
 
       <figure className="project-hero-image">
         <Media src={project.thumbnail} alt={project.title} label={project.title} loading="eager" />
