@@ -1,7 +1,14 @@
 import { type ChangeEvent, type CSSProperties, useRef, useState } from "react";
 import Avatar from "./Avatar";
 import Media from "./Media";
-import { ImagePlaceholderIcon, PauseIcon, PlayIcon } from "./icons/LucideIcons";
+import {
+  ImagePlaceholderIcon,
+  PauseIcon,
+  PlayIcon,
+  Volume1Icon,
+  Volume2Icon,
+  VolumeXIcon,
+} from "./icons/LucideIcons";
 import type { ProjectContentBlock, ProjectVideoBlock } from "../types/project";
 
 type ProjectContentRendererProps = {
@@ -27,12 +34,18 @@ function ProjectVideoPlayer({ poster, src, title, ratio }: ProjectVideoBlock) {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [hasError, setHasError] = useState(false);
+  const [volume, setVolume] = useState(1);
+  const [isMuted, setIsMuted] = useState(false);
 
   const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
   const scrubberStyle = {
     "--video-progress": `${progress}%`,
   } as CSSProperties;
   const playerStyle = ratio ? ({ "--media-ratio": ratio } as CSSProperties) : undefined;
+  const effectiveVolume = isMuted ? 0 : volume;
+  const volumeStyle = {
+    "--volume-progress": `${effectiveVolume * 100}%`,
+  } as CSSProperties;
 
   const togglePlayback = async () => {
     const video = videoRef.current;
@@ -86,6 +99,49 @@ function ProjectVideoPlayer({ poster, src, title, ratio }: ProjectVideoBlock) {
     }
   };
 
+  const changeVolume = (event: ChangeEvent<HTMLInputElement>) => {
+    const video = videoRef.current;
+    const nextVolume = Number(event.currentTarget.value);
+
+    setVolume(nextVolume);
+    setIsMuted(nextVolume === 0);
+
+    if (video) {
+      video.volume = nextVolume;
+      video.muted = nextVolume === 0;
+    }
+  };
+
+  const toggleMute = () => {
+    const video = videoRef.current;
+    const nextMuted = !isMuted;
+
+    setIsMuted(nextMuted);
+
+    if (!nextMuted && volume === 0) {
+      setVolume(1);
+
+      if (video) {
+        video.volume = 1;
+      }
+    }
+
+    if (video) {
+      video.muted = nextMuted;
+    }
+  };
+
+  const syncVolume = () => {
+    const video = videoRef.current;
+
+    if (!video) {
+      return;
+    }
+
+    setVolume(video.volume);
+    setIsMuted(video.muted || video.volume === 0);
+  };
+
   if (hasError) {
     return (
       <figure className="content-video">
@@ -119,6 +175,7 @@ function ProjectVideoPlayer({ poster, src, title, ratio }: ProjectVideoBlock) {
           onPause={() => setIsPlaying(false)}
           onPlay={() => setIsPlaying(true)}
           onTimeUpdate={syncVideoTime}
+          onVolumeChange={syncVolume}
           onError={() => setHasError(true)}
         />
         <div className="video-controls" aria-label="Video Steuerung">
@@ -145,6 +202,34 @@ function ProjectVideoPlayer({ poster, src, title, ratio }: ProjectVideoBlock) {
             style={scrubberStyle}
             onChange={seekVideo}
           />
+          <div className="video-volume">
+            <button
+              className="video-control"
+              type="button"
+              aria-label={isMuted || effectiveVolume === 0 ? "Ton aktivieren" : "Stummschalten"}
+              aria-pressed={isMuted}
+              onClick={toggleMute}
+            >
+              {isMuted || effectiveVolume === 0 ? (
+                <VolumeXIcon />
+              ) : effectiveVolume < 0.5 ? (
+                <Volume1Icon />
+              ) : (
+                <Volume2Icon />
+              )}
+            </button>
+            <input
+              className="video-volume-slider"
+              type="range"
+              min="0"
+              max="1"
+              step="0.05"
+              value={effectiveVolume}
+              aria-label="Lautstärke"
+              style={volumeStyle}
+              onChange={changeVolume}
+            />
+          </div>
         </div>
       </div>
       <figcaption>{title}</figcaption>
