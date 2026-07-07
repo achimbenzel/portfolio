@@ -1080,6 +1080,16 @@ img {
   gap: clamp(16px, 2vw, 20px);
 }
 
+/* Fixed-ratio grid (e.g. portrait 1620x2025): equal cells, same total width */
+.content-image-grid-fixed figure {
+  aspect-ratio: var(--media-ratio);
+}
+
+.content-image-grid-fixed img {
+  height: 100%;
+  object-fit: cover;
+}
+
 .content-video {
   display: grid;
   gap: 10px;
@@ -1088,7 +1098,7 @@ img {
 
 .video-player {
   position: relative;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: var(--media-ratio, 16 / 9);
   overflow: hidden;
   border: 1px solid var(--border);
   border-radius: var(--radius-large);

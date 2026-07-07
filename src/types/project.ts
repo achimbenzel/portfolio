@@ -13,6 +13,8 @@ export type ProjectImageBlock = {
 
 export type ProjectImageGridBlock = {
   type: "imageGrid";
+  /** Optional fixed aspect ratio per cell, e.g. "1620 / 2025" for portrait images. */
+  ratio?: string;
   images: Array<{
     src: string;
     alt: string;
@@ -24,6 +26,8 @@ export type ProjectVideoBlock = {
   src: string;
   title: string;
   poster?: string;
+  /** Optional aspect ratio, e.g. "2560 / 1920" for a 4:3 clip at full width. */
+  ratio?: string;
 };
 
 export type ProjectTestimonialBlock = {

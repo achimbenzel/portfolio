@@ -21,7 +21,7 @@ function formatTime(seconds: number) {
   return `${minutes}:${remainingSeconds}`;
 }
 
-function ProjectVideoPlayer({ poster, src, title }: ProjectVideoBlock) {
+function ProjectVideoPlayer({ poster, src, title, ratio }: ProjectVideoBlock) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -32,6 +32,7 @@ function ProjectVideoPlayer({ poster, src, title }: ProjectVideoBlock) {
   const scrubberStyle = {
     "--video-progress": `${progress}%`,
   } as CSSProperties;
+  const playerStyle = ratio ? ({ "--media-ratio": ratio } as CSSProperties) : undefined;
 
   const togglePlayback = async () => {
     const video = videoRef.current;
@@ -88,7 +89,12 @@ function ProjectVideoPlayer({ poster, src, title }: ProjectVideoBlock) {
   if (hasError) {
     return (
       <figure className="content-video">
-        <div className="video-player video-player-fallback" role="img" aria-label={title}>
+        <div
+          className="video-player video-player-fallback"
+          role="img"
+          aria-label={title}
+          style={playerStyle}
+        >
           <ImagePlaceholderIcon className="media-fallback-icon" />
           <span className="media-fallback-label">{title}</span>
         </div>
@@ -99,7 +105,7 @@ function ProjectVideoPlayer({ poster, src, title }: ProjectVideoBlock) {
 
   return (
     <figure className="content-video">
-      <div className="video-player">
+      <div className="video-player" style={playerStyle}>
         <video
           loop
           playsInline
@@ -202,8 +208,18 @@ export default function ProjectContentRenderer({ content }: ProjectContentRender
         }
 
         if (block.type === "imageGrid") {
+          const gridStyle = block.ratio
+            ? ({ "--media-ratio": block.ratio } as CSSProperties)
+            : undefined;
+
           return (
-            <div className="content-image-grid" key={`${block.type}-${index}`}>
+            <div
+              className={
+                block.ratio ? "content-image-grid content-image-grid-fixed" : "content-image-grid"
+              }
+              style={gridStyle}
+              key={`${block.type}-${index}`}
+            >
               {block.images.map((image) => (
                 <figure key={image.src}>
                   <Media src={image.src} alt={image.alt} />

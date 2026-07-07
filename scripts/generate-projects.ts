@@ -165,6 +165,18 @@ function validateImageBlock(
   };
 }
 
+function readRatio(value: unknown, folder: string) {
+  if (value === undefined) {
+    return undefined;
+  }
+
+  if (typeof value !== "string" || !/^\s*\d+(\.\d+)?\s*\/\s*\d+(\.\d+)?\s*$/.test(value)) {
+    throw new Error(`Project ${folder}: "ratio" must be a string like "1620 / 2025".`);
+  }
+
+  return value.trim();
+}
+
 function validateImageGridBlock(
   block: Record<string, unknown>,
   folder: string,
@@ -175,6 +187,7 @@ function validateImageGridBlock(
 
   return {
     type: "imageGrid",
+    ratio: readRatio(block.ratio, folder),
     images: block.images.map((image, index) => {
       if (!isRecord(image)) {
         throw new Error(`Project ${folder}: imageGrid image ${index + 1} is invalid.`);
@@ -201,6 +214,7 @@ function validateVideoBlock(block: Record<string, unknown>, folder: string): Pro
     src: resolveAsset(folder, src),
     title,
     poster,
+    ratio: readRatio(block.ratio, folder),
   };
 }
 
