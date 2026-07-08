@@ -1068,7 +1068,8 @@ img {
 }
 
 .content-image img,
-.content-image-grid img {
+.content-image-grid img,
+.content-image-grid .grid-video {
   width: 100%;
   height: auto;
   object-fit: contain;
@@ -1085,9 +1086,14 @@ img {
   aspect-ratio: var(--media-ratio);
 }
 
-.content-image-grid-fixed img {
+.content-image-grid-fixed img,
+.content-image-grid-fixed .grid-video {
   height: 100%;
   object-fit: cover;
+}
+
+.grid-video {
+  display: block;
 }
 
 .content-video {

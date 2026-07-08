@@ -15,6 +15,40 @@ type ProjectContentRendererProps = {
   content: ProjectContentBlock[];
 };
 
+function isVideoSource(src: string) {
+  return /\.(mp4|webm|mov|m4v|ogv)$/i.test(src);
+}
+
+/**
+ * A grid cell that plays an mp4 (or other video) as a silent, looping clip so it
+ * behaves like a moving image. Falls back to the neutral placeholder on error.
+ */
+function GridVideo({ src, alt }: { src: string; alt: string }) {
+  const [hasError, setHasError] = useState(false);
+
+  if (hasError) {
+    return (
+      <div className="media-fallback" role="img" aria-label={alt}>
+        <ImagePlaceholderIcon className="media-fallback-icon" />
+      </div>
+    );
+  }
+
+  return (
+    <video
+      className="grid-video"
+      src={src}
+      aria-label={alt}
+      autoPlay
+      loop
+      muted
+      playsInline
+      preload="metadata"
+      onError={() => setHasError(true)}
+    />
+  );
+}
+
 function formatTime(seconds: number) {
   if (!Number.isFinite(seconds) || seconds <= 0) {
     return "0:00";
@@ -307,7 +341,11 @@ export default function ProjectContentRenderer({ content }: ProjectContentRender
             >
               {block.images.map((image) => (
                 <figure key={image.src}>
-                  <Media src={image.src} alt={image.alt} />
+                  {isVideoSource(image.src) ? (
+                    <GridVideo src={image.src} alt={image.alt} />
+                  ) : (
+                    <Media src={image.src} alt={image.alt} />
+                  )}
                 </figure>
               ))}
             </div>
